@@ -6,6 +6,12 @@ function CalcVIN()
 	var input = document.getElementById("vinCalcInput").value;
 	var output = input;
 
+	if (output.length == 0)
+	{
+		document.getElementById("vinCalcOutput").innerHTML = "";
+		return;
+	}
+
 	if (output.length == 17)
 	{
 		if (STRICT_CHECK_DIGIT && !/^[\dA-HJ-NPR-Z]{8}[\dX][\dA-HJ-NPR-Z]{8}$/i.test(output))
