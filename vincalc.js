@@ -3,13 +3,45 @@ function CalcVIN()
 	var STRICT_CHECK_DIGIT = true;
 	var SUCCESS = "#00C000";
 	var ERROR = "Red";
+	var NORMAL = "Black";
+	var DMC_Logic = document.getElementById("chkDMC").checked;
 	var input = document.getElementById("vinCalcInput").value;
 	var output = input;
+	var isDMCSuffix = /^\d{3,6}$/.test(output);
 
 	if (output.length == 0)
 	{
 		document.getElementById("vinCalcOutput").innerHTML = "";
 		return;
+	}
+
+	if (DMC_Logic && isDMCSuffix)
+	{//3-6 numbers, so assume DeLorean VIN
+		var number = parseInt(output) % 1000000; //Ignore additional characters
+
+		output = "SCEDT26TX";
+
+		if (number < 10000)
+		{//1981 VIN's
+			output += "BD";
+		}
+		else if (number < 15000)
+		{//1982 VIN's
+			output += "CD";
+		}
+		else
+		{//1983 VIN's
+			output += "DD";
+		}
+
+		var strNumber = '' + number;
+
+		while (strNumber.length < 6)
+		{
+			strNumber = '0' + strNumber;
+		}
+
+		output += strNumber;
 	}
 
 	if (output.length == 17)
@@ -102,12 +134,17 @@ function CalcVIN()
 	}
 	else
 	{
-		document.getElementById("vinCalcOutput").innerHTML = "VIN too short!";
+		document.getElementById("vinCalcOutput").innerHTML = "VIN too short" + (DMC_Logic ? " and not numeric!" : "!");
 		document.getElementById("vinCalcOutput").style.color = ERROR;
 		return;
 	}
 
-	if (input == output)
+	if (isDMCSuffix)
+	{
+		document.getElementById("vinCalcOutput").innerHTML = output;
+		document.getElementById("vinCalcOutput").style.color = NORMAL;
+	}
+	else if (input == output)
 	{
 		document.getElementById("vinCalcOutput").innerHTML = "Check Digit Valid!";
 		document.getElementById("vinCalcOutput").style.color = SUCCESS;

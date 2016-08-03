@@ -7,6 +7,8 @@
 	<body>
 		<input id="vinCalcInput" type="text" maxlength="17" onKeyUp="CalcVIN(); return false;" />
 		<br />
+		<input id="chkDMC" type="checkbox" onchange="CalcVIN(); return false;">Enable DeLorean-specific VIN suffix logic?</input>
+		<br />
 		<span id="vinCalcOutput"></span>
 	</body>
 </html>
